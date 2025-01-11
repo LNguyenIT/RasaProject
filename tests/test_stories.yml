@@ -1,0 +1,24 @@
+version: "3.1"
+stories:
+  - story: Test chào hỏi
+    steps:
+      - user: |
+          Chào bot.
+        intent: greet
+      - action: utter_greet
+
+  - story: Test hỏi trạng thái sản phẩm Xiaomi 13T
+    steps:
+      - user: |
+          Điện thoại Xiaomi 13T còn không?
+        intent: ask_product_status
+        entities:
+          - product_name: "Xiaomi 13T"
+      - action: action_check_product_status
+
+  - story: Test hỏi chính sách bảo hành
+    steps:
+      - user: |
+          Chính sách bảo hành như thế nào?
+        intent: warranty_policy
+      - action: utter_warranty_policy

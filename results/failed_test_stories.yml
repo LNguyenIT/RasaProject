@@ -1,0 +1,6 @@
+version: "3.1"
+stories:
+- story: Test hỏi trạng thái sản phẩm Xiaomi 13T (C:\Users\Acer\PycharmProjects\rasaProject\tests\test_stories.yml)
+  steps:
+  - intent: ask_product_status  # predicted: ask_product_status: Điện thoại [Xiaomi 13T](product_name) còn không?
+  - action: action_check_product_status

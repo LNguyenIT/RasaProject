@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Demo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
+</head>
+<body>
+
+<div class="chat-container">
+    <h2>Chat với Chatbot</h2>
+
+    <div id="chat-box">
+        <!-- Tin nhắn sẽ xuất hiện ở đây -->
+    </div>
+
+    <input type="text" id="user-input" placeholder="Nhập câu hỏi của bạn..." />
+    <button onclick="sendMessage()">Gửi</button>
+</div>
+
+<script>
+    function sendMessage() {
+        var input = document.getElementById("user-input").value;
+        if (input) {
+            var chatBox = document.getElementById("chat-box");
+
+            // Hiển thị tin nhắn của người dùng
+            var userMessage = document.createElement("div");
+            userMessage.classList.add("message", "user-message");
+            userMessage.innerText = "Bạn: " + input;
+            chatBox.appendChild(userMessage);
+
+            // Lấy phản hồi từ chatbot
+            fetch(`/chatbot_response`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: input })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hiển thị tin nhắn của chatbot
+                var botMessage = document.createElement("div");
+                botMessage.classList.add("message", "bot-message");
+                botMessage.innerText = "Bot: " + data.response;
+                chatBox.appendChild(botMessage);
+
+                // Cuộn xuống cuối cùng để hiển thị tin nhắn mới nhất
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+
+            // Xóa ô nhập liệu sau khi gửi
+            document.getElementById("user-input").value = '';
+        }
+    }
+
+    // Thêm sự kiện để nhấn Enter
+    document.getElementById("user-input").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
+
+    // Cuộn xuống cuối chat box mỗi khi có tin nhắn mới
+    function scrollToBottom() {
+        var chatBox = document.getElementById("chat-box");
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Gọi hàm scrollToBottom khi trang được tải và sau khi có tin nhắn mới
+    window.onload = scrollToBottom;
+</script>
+
+</body>
+</html>
